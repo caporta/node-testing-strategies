@@ -24,6 +24,11 @@ describe('Applying for mission', () => {
   })
 
   describe('Application invalid if...', () => {
+    it('is expired', () => {
+      const app = new MembershipApplication({ validUntil: Date.parse('01/01/2010') })
+      assert(app.expired())
+    })
+
     it('has an email four characters or less', () => {
       const app = new MembershipApplication({ email: 'dd' })
       assert(!app.emailIsValid())

@@ -1,14 +1,23 @@
 const _ = require('lodash')
+const moment = require('moment')
 
 
 class MembershipApplication {
   constructor(args) {
+    args || (args = {})
     _.extend(this, args)
+
+    this.validUntil = args.validUntil
+      ? moment(args.validUntil)
+      : moment().add(10, 'days')
+  }
+
+  expired() {
+    return this.validUntil.isBefore(moment())
   }
 
   nameIsValid() {
-    const { first, last } = this
-    return first && last
+    return this.first && this.last
   }
 
   emailIsValid() {
@@ -36,6 +45,7 @@ class MembershipApplication {
       && this.heightIsValid()
       && this.ageIsValid()
       && this.weightIsValid()
+      && !this.expired()
   }
 }
 
